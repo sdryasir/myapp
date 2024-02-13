@@ -3,7 +3,7 @@ export default function Footer() {
     <nav className="navbar bg-body-tertiary">
       <div className="container-fluid">
         <span className="navbar-text">
-          Designed By: STICS
+          Designed By: STICS, Instructor Yasir Ali
         </span>
       </div>
     </nav>
