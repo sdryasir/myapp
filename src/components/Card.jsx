@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 function Card({product}) {
+
+
     return (
         <>
             <div className="col-md-3 mb-3">
