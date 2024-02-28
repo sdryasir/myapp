@@ -9,13 +9,40 @@ function Contact() {
     email: '',
   });
 
+
+
   const [contacts, setContacts] = useState([]);
 
-  const notify = () => toast("Contact has been saved!");
+  const notify = () => toast("Contact has been saved!", {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    });
+  const notify1 = () => toast("Are you sure to delete this", {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    contacts.push(contact);
+
+    let newContact = {
+      ...contact,
+      id:Date.now()
+    }
+
+    contacts.push(newContact)
     localStorage.setItem('contact', JSON.stringify(contacts));
     notify();
     setContact({
@@ -32,6 +59,20 @@ function Contact() {
       setContacts(storedContacts);
     }
   }, []);
+
+
+  const handleDelete = (id)=>{
+    notify1();
+    let contactArr = JSON.parse(localStorage.getItem('contact'));
+
+    const filteredArr = contactArr.filter((c)=>c.id != id);
+
+    
+    localStorage.setItem('contact', JSON.stringify(filteredArr));
+
+
+
+  }
 
 
   return (
@@ -67,7 +108,7 @@ function Contact() {
             <td>{c.fullname}</td>
             <td>{c.email}</td>
             <td>
-              <button className='btn btn-danger me-2'><i className="bi bi-trash"></i></button>
+              <button className='btn btn-danger me-2' onClick={()=>handleDelete(c.id)}><i className="bi bi-trash"></i></button>
               <button className='btn btn-warning me-2'><i className="bi bi-pencil-square"></i></button>
               <button className='btn btn-success me-2'><i className="bi bi-telephone-forward"></i></button>
             </td>
@@ -76,18 +117,7 @@ function Contact() {
           }
         </tbody>
       </table>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+      <ToastContainer/>
     </div>
   )
 }
