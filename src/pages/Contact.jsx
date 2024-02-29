@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom'
 
 function Contact() {
+
+  const navigate = useNavigate();
 
   const [contact, setContact] = useState({
     fullname: '',
     email: '',
+    contact: '',
   });
 
 
@@ -64,14 +69,8 @@ function Contact() {
   const handleDelete = (id)=>{
     notify1();
     let contactArr = JSON.parse(localStorage.getItem('contact'));
-
     const filteredArr = contactArr.filter((c)=>c.id != id);
-
-    
     localStorage.setItem('contact', JSON.stringify(filteredArr));
-
-
-
   }
 
 
@@ -86,8 +85,12 @@ function Contact() {
           <label htmlFor="email" className="form-label">Email</label>
           <input type="text" onChange={(event) => setContact({ ...contact, email: event.target.value })} value={contact.email} className="form-control" id="email" />
         </div>
+        <div className="col-md-12">
+          <label htmlFor="contact" className="form-label">Contact</label>
+          <input type="text" onChange={(event) => setContact({ ...contact, contact: event.target.value })} value={contact.contact} className="form-control" id="email" />
+        </div>
         <div className="col-12">
-          <button type="submit" className="btn btn-primary">Send a Message</button>
+          <button type="submit" className="btn btn-primary">Add a Contact</button>
         </div>
       </form>
       <table className="table">
@@ -96,6 +99,7 @@ function Contact() {
             <th scope="col">#</th>
             <th scope="col">FullName</th>
             <th scope="col">Email</th>
+            <th scope="col">Contact</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -107,10 +111,11 @@ function Contact() {
             <th scope="row">{idx+1}</th>
             <td>{c.fullname}</td>
             <td>{c.email}</td>
+            <td>{c.contact}</td>
             <td>
               <button className='btn btn-danger me-2' onClick={()=>handleDelete(c.id)}><i className="bi bi-trash"></i></button>
-              <button className='btn btn-warning me-2'><i className="bi bi-pencil-square"></i></button>
-              <button className='btn btn-success me-2'><i className="bi bi-telephone-forward"></i></button>
+              <Link to={`/edit/${c.id}`} className='btn btn-warning me-2'><i className="bi bi-pencil-square"></i></Link>
+              <a href={`tel:${c.contact}`} className='btn btn-success me-2'><i className="bi bi-telephone-forward"></i></a>
             </td>
           </tr>)
             
@@ -123,4 +128,8 @@ function Contact() {
 }
 
 export default Contact
+
+
+
+
 
