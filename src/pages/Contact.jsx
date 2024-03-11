@@ -2,17 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom'
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 function Contact() {
 
-  const navigate = useNavigate();
-
-  const [contact, setContact] = useState({
-    fullname: '',
-    email: '',
-    contact: '',
-  });
 
 
 
@@ -39,23 +33,34 @@ function Contact() {
     theme: "light",
     });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    let newContact = {
-      ...contact,
-      id:Date.now()
+  
+
+  const {handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
+    initialValues:{
+      fullname:'',
+      email:'',
+      contact:''
+    },
+    validationSchema:Yup.object({
+      fullname: Yup.string().min(4, 'Please provide atleaset 4 characters').max(15, 'Please provide 15 character at max').required('please fill fullname').trim(),
+      email: Yup.string().required('please fill email').matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please provide valid email').trim(),
+      contact: Yup.string().matches(/^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/gm, 'Please provide the valid Phone Number (+92xxxxxxxxxxx)').required('please fill contact').trim(),
+    }),
+    onSubmit:(vals)=>{
+
+      let newContact = {
+        ...vals,
+        id:Date.now()
+      }
+      contacts.push(newContact)
+      localStorage.setItem('contact', JSON.stringify(contacts));
+      notify();
     }
+  });
 
-    contacts.push(newContact)
-    localStorage.setItem('contact', JSON.stringify(contacts));
-    notify();
-    setContact({
-      fullname: '',
-      email: '',
-    })
 
-  }
+
 
   useEffect(() => {
     let storedContacts = localStorage.getItem('contact');
@@ -74,20 +79,26 @@ function Contact() {
   }
 
 
+ 
+
+
   return (
     <div className='container'>
       <form className="row g-3 py-5 w-50" onSubmit={handleSubmit}>
         <div className="col-md-12">
           <label htmlFor="fullName" className="form-label">Full Name</label>
-          <input type="text" onChange={(event) => setContact({ ...contact, fullname: event.target.value })} value={contact.fullname} className="form-control" id="fullName" />
+          <input type="text" onChange={handleChange} onBlur={handleBlur} value={values.fullname} className="form-control" id="fullName" name='fullname' />
+          <p className='text-danger'><small>{touched.fullname && errors.fullname ? errors.fullname : null}</small></p>
         </div>
         <div className="col-md-12">
           <label htmlFor="email" className="form-label">Email</label>
-          <input type="text" onChange={(event) => setContact({ ...contact, email: event.target.value })} value={contact.email} className="form-control" id="email" />
+          <input type="text" onChange={handleChange} onBlur={handleBlur} value={values.email} className="form-control" id="email" name='email' />
+          <p className='text-danger'><small>{touched.email && errors.email ?errors.email : null}</small></p>
         </div>
         <div className="col-md-12">
           <label htmlFor="contact" className="form-label">Contact</label>
-          <input type="text" onChange={(event) => setContact({ ...contact, contact: event.target.value })} value={contact.contact} className="form-control" id="email" />
+          <input type="text" onChange={handleChange} onBlur={handleBlur} value={values.contact} className="form-control" id="contact" name='contact' />
+          <p className='text-danger'><small>{touched.contact && errors.contact ? errors.contact: null}</small></p>
         </div>
         <div className="col-12">
           <button type="submit" className="btn btn-primary">Add a Contact</button>
