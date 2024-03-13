@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 export default function Header() {
+  const {depositReducer} = useSelector(state=>state);
   return <header>
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container">
@@ -19,11 +21,11 @@ export default function Header() {
           </ul>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <button type="button" class="btn btn-primary position-relative">
+              <button type="button" className="btn btn-primary position-relative">
                 Total
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  0
-                  <span class="visually-hidden">unread messages</span>
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {depositReducer.value}
+                  <span className="visually-hidden">unread messages</span>
                 </span>
               </button>
             </li>

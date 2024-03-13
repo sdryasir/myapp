@@ -1,13 +1,13 @@
 import React from 'react'
-import Header from '../components/Header'
 import Main from '../components/Main'
-import Footer from '../components/Footer'
+import { useSelector } from 'react-redux';
 
 function Home() {
-
+  const {depositReducer} = useSelector(state=>state);
   return (
     <div>
         <Main/>
+        {depositReducer.value}
     </div>
   )
 }

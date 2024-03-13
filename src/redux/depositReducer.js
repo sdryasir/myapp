@@ -7,11 +7,11 @@ export const depositSlice = createSlice({
         value:0
     },
     reducers:{
-        deposit:()=>{
-
+        deposit:(state)=>{
+            state.value = state.value+10;
         },
-        withdraw:()=>{
-
+        withdraw:(state)=>{
+            state.value = state.value-10;
         }
     }
 });
