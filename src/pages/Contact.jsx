@@ -4,13 +4,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToContacts, deleteContact } from '../redux/contactReducer';
 
 function Contact() {
 
+const dispatch = useDispatch();
 
-
-
-  const [contacts, setContacts] = useState([]);
+const {contactReducer} = useSelector(state=>state)
 
   const notify = () => toast("Contact has been saved!", {
     position: "top-right",
@@ -53,34 +54,15 @@ function Contact() {
         ...vals,
         id:Date.now()
       }
-      contacts.push(newContact)
-      localStorage.setItem('contact', JSON.stringify(contacts));
+      dispatch(addToContacts(newContact));
       notify();
     }
   });
 
-
-
-
-  useEffect(() => {
-    let storedContacts = localStorage.getItem('contact');
-    storedContacts = JSON.parse(storedContacts);
-    if (storedContacts != null) {
-      setContacts(storedContacts);
-    }
-  }, []);
-
-
   const handleDelete = (id)=>{
+    dispatch(deleteContact(id));
     notify1();
-    let contactArr = JSON.parse(localStorage.getItem('contact'));
-    const filteredArr = contactArr.filter((c)=>c.id != id);
-    localStorage.setItem('contact', JSON.stringify(filteredArr));
   }
-
-
- 
-
 
   return (
     <div className='container'>
@@ -117,8 +99,8 @@ function Contact() {
         <tbody>
           {
 
-          contacts.length < 1 ? <tr><td><p>No Data Found...</p></td></tr> :
-          contacts.map((c, idx)=><tr key={idx}>
+          contactReducer.contacts.length < 1 ? <tr><td><p>No Data Found...</p></td></tr> :
+          contactReducer.contacts.map((c, idx)=><tr key={idx}>
             <th scope="row">{idx+1}</th>
             <td>{c.fullname}</td>
             <td>{c.email}</td>
