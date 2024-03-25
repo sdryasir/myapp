@@ -12,6 +12,7 @@ function Card({product}) {
                         <h5 className="card-title">{product.title}</h5>
                         <p className="card-text">{product.description}</p>
                         <a href="#" className="btn btn-primary">{product.price}</a>
+                        <button className='btn btn-danger'>delete</button>
                     </div>
                 </div>
             </div>

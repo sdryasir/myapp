@@ -18,6 +18,9 @@ export default function Header() {
             <li className="nav-item">
               <Link className="nav-link" to="/contact">Contact Us</Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/products">Products API</Link>
+            </li>
           </ul>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
