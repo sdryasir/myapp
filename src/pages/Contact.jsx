@@ -6,12 +6,14 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToContacts, deleteContact } from '../redux/contactReducer';
+import localAvatr from '../assets/local_avatar.png';
 
 function Contact() {
 
 const dispatch = useDispatch();
 
 const {contactReducer} = useSelector(state=>state)
+const [preview, setPreview] = useState(undefined)
 
   const notify = () => toast("Contact has been saved!", {
     position: "top-right",
@@ -37,16 +39,18 @@ const {contactReducer} = useSelector(state=>state)
 
   
 
-  const {handleChange, handleBlur, handleSubmit, values, errors, touched } = useFormik({
+  const {handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue } = useFormik({
     initialValues:{
       fullname:'',
       email:'',
-      contact:''
+      contact:'',
+      avatar:''
     },
     validationSchema:Yup.object({
       fullname: Yup.string().min(4, 'Please provide atleaset 4 characters').max(15, 'Please provide 15 character at max').required('please fill fullname').trim(),
       email: Yup.string().required('please fill email').matches(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please provide valid email').trim(),
       contact: Yup.string().matches(/^((\+92)?(0092)?(92)?(0)?)(3)([0-9]{9})$/gm, 'Please provide the valid Phone Number (+92xxxxxxxxxxx)').required('please fill contact').trim(),
+      avatar:Yup.string()
     }),
     onSubmit:(vals)=>{
 
@@ -54,6 +58,9 @@ const {contactReducer} = useSelector(state=>state)
         ...vals,
         id:Date.now()
       }
+
+      console.log(newContact);
+
       dispatch(addToContacts(newContact));
       notify();
     }
@@ -62,6 +69,23 @@ const {contactReducer} = useSelector(state=>state)
   const handleDelete = (id)=>{
     dispatch(deleteContact(id));
     notify1();
+  }
+
+  const handleImageChange = (event) =>{
+
+
+    const reader = new FileReader();
+
+    reader.onload = (e)=>{
+      if(reader.readyState == 2){
+        // console.log(reader.result);
+        setPreview(reader.result);
+        setFieldValue('avatar', reader.result);
+      }
+    }
+
+    reader.readAsDataURL(event.target.files[0]);
+
   }
 
   return (
@@ -82,6 +106,13 @@ const {contactReducer} = useSelector(state=>state)
           <input type="text" onChange={handleChange} onBlur={handleBlur} value={values.contact} className="form-control" id="contact" name='contact' />
           <p className='text-danger'><small>{touched.contact && errors.contact ? errors.contact: null}</small></p>
         </div>
+        <div className="col-md-6">
+          <label htmlFor="avatar" className="form-label">Contact</label>
+          <input type="file" onChange={(e)=>handleImageChange(e)}  className="form-control" id="avatar" name='avatar' />          
+        </div>
+        <div className="col-md-6">
+          <img style={{width:'100px', height:'100px', borderRadius:'50%', objectFit:'cover'}} src={preview ? preview : localAvatr} alt="" />
+        </div>
         <div className="col-12">
           <button type="submit" className="btn btn-primary">Add a Contact</button>
         </div>
@@ -90,6 +121,7 @@ const {contactReducer} = useSelector(state=>state)
         <thead>
           <tr>
             <th scope="col">#</th>
+            <th scope="col">Avatar</th>
             <th scope="col">FullName</th>
             <th scope="col">Email</th>
             <th scope="col">Contact</th>
@@ -102,6 +134,7 @@ const {contactReducer} = useSelector(state=>state)
           contactReducer.contacts.length < 1 ? <tr><td><p>No Data Found...</p></td></tr> :
           contactReducer.contacts.map((c, idx)=><tr key={idx}>
             <th scope="row">{idx+1}</th>
+            <td><img style={{width:'30px', height:'30px', borderRadius:'50%', objectFit:'cover'}} src={c.avatar ? c.avatar : localAvatr} alt="" /></td>
             <td>{c.fullname}</td>
             <td>{c.email}</td>
             <td>{c.contact}</td>

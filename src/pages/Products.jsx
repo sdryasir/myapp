@@ -44,6 +44,8 @@ function Products() {
 
     }
 
+    
+
     useEffect(() => {
         getData();
     },[])
@@ -76,6 +78,16 @@ function Card({product}) {
             console.log(err);
         })
     }
+    const handleUpdate = (id, item)=>{
+        axios.put(`https://fakestoreapi.com/products/${id}`, item)
+        .then((res)=>{
+            console.log(res);
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
+
+
 
     return (
         <div className='col-md-3 mb-4'>
@@ -87,6 +99,7 @@ function Card({product}) {
                     <a href="#" class="btn btn-primary">Add to Cart</a>
                     <a href="#" class="btn">PKR {product.price}</a>
                     <button className='btn btn-danger' onClick={()=>handleDelete(product.id)}>delete</button>
+                    <button className='btn btn-info' onClick={()=>handleUpdate(product.id, product)}>Update</button>
                 </div>
             </div>
         </div>
