@@ -12,4 +12,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: "AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL-COMPRESSED";
+  src: local('AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL-COMPRESSED') url('./assets/fonts/AlQuran-IndoPak-by-QuranWBW.v.4.2.2-WL-COMPRESSED.woff') format("woff");
+}
 

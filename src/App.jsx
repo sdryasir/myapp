@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Home from "./pages/Home";
+
+
 import {
   createBrowserRouter,
   RouterProvider, 
@@ -12,6 +14,8 @@ import NotFound from "./pages/NotFound";
 import RootLayout from "./pages/RootLayout";
 import EditContact from "./pages/EditContact";
 import Products from "./pages/Products";
+import Quran from "./pages/Quran";
+import Surah from "./pages/Surah";
 
 
 
@@ -24,6 +28,8 @@ const router = createBrowserRouter(
         <Route path="/contact" element={<Contact/>}/>
         <Route path="/edit/:id" element={<EditContact/>}/>
         <Route path="/products" element={<Products/>}/>
+        <Route path="/quran" element={<Quran/>}/>
+        <Route path="/surah/:id" element={<Surah/>}/>
       </Route>
       <Route path="*" element={<NotFound/>}/>
     </Route>

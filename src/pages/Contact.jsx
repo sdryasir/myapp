@@ -12,7 +12,7 @@ function Contact() {
 
 const dispatch = useDispatch();
 
-const {contactReducer} = useSelector(state=>state)
+const {persistedReducer} = useSelector(state=>state)
 const [preview, setPreview] = useState(undefined)
 
   const notify = () => toast("Contact has been saved!", {
@@ -131,8 +131,8 @@ const [preview, setPreview] = useState(undefined)
         <tbody>
           {
 
-          contactReducer.contacts.length < 1 ? <tr><td><p>No Data Found...</p></td></tr> :
-          contactReducer.contacts.map((c, idx)=><tr key={idx}>
+persistedReducer.contactReducer.contacts.length < 1 ? <tr><td><p>No Data Found...</p></td></tr> :
+persistedReducer.contactReducer.contacts.map((c, idx)=><tr key={idx}>
             <th scope="row">{idx+1}</th>
             <td><img style={{width:'30px', height:'30px', borderRadius:'50%', objectFit:'cover'}} src={c.avatar ? c.avatar : localAvatr} alt="" /></td>
             <td>{c.fullname}</td>

@@ -5,7 +5,7 @@ import { deposit, withdraw } from '../redux/depositReducer';
 function About() {
 
   const dispatch = useDispatch();
-  const {depositReducer} = useSelector(state=>state);
+  const {persistedReducer} = useSelector(state=>state);
 
 
   const depositAmount=()=>{
@@ -18,7 +18,7 @@ function About() {
     <div className='container'>
        <button onClick={depositAmount}>Deposit</button>
        <button onClick={withdrawAmount}>Withdraw</button>
-       <h1>${depositReducer.value}</h1>
+       <h1>${persistedReducer.depositReducer.value}</h1>
     </div>
   )
 }

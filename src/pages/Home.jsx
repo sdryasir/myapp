@@ -3,12 +3,12 @@ import Main from '../components/Main'
 import { useSelector } from 'react-redux';
 
 function Home() {
-  const {depositReducer} = useSelector(state=>state);
+  const {persistedReducer} = useSelector(state=>state);
 
   return (
     <div>
         <Main/>
-        {depositReducer.value}
+        {persistedReducer.depositReducer.value}
     </div>
   )
 }
